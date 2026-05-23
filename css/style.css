@@ -722,6 +722,15 @@ img {
   padding: var(--space-md) 0;
   border-bottom: 1px solid var(--line);
   transition: opacity 240ms ease, padding-left 240ms ease;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .about-direction__list li {
+    font-size: clamp(22px, 6.4vw, 30px);
+    letter-spacing: -0.025em;
+  }
+  .about-direction__list li .num { margin-right: 12px; font-size: 0.5em; }
 }
 
 .about-direction__list li:hover {
