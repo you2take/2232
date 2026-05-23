@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2232.inc — Creative Label</title>
+  <meta name="description" content="2232.inc is a creative label based in Japan. Adding a small spice to repetitive everyday life." />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="2232.inc — Creative Label" />
+  <meta property="og:description" content="連続する日常に、ほんの少しのスパイスを。/ Creative Label Based in Japan." />
+  <meta property="og:image" content="assets/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale" content="ja_JP" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="2232.inc — Creative Label" />
+  <meta name="twitter:description" content="連続する日常に、ほんの少しのスパイスを。" />
+  <meta name="twitter:image" content="assets/og.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Cormorant+Garamond:ital,wght@1,400;1,500&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="header">
+    <a href="index.html" class="header__logo" aria-label="2232.inc">
+      <img src="assets/logo-white.svg" alt="2232.inc" class="header__logo-img" />
+    </a>
+    <button class="header__burger" aria-label="Menu" type="button">
+      <span></span><span></span>
+    </button>
+    <nav class="header__nav" aria-label="Global">
+      <a href="about.html">About</a>
+      <a href="https://www.2232gallery.com/" target="_blank" rel="noopener">Gallery&nbsp;↗</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- S1 Hero — cinematic scale+crossfade driven by scroll within .hero-wrap -->
+    <section class="hero-wrap" data-hero>
+      <div class="hero-sticky">
+        <div class="hero__glow" aria-hidden="true"></div>
+        <h1 class="hero-stack" aria-label="2232.inc">
+          <img src="assets/logo-white.svg" alt="" class="hero-stack__img hero-stack__img--white" aria-hidden="true" />
+          <img src="assets/logo-fv.svg" alt="2232.inc" class="hero-stack__img hero-stack__img--pink" />
+        </h1>
+        <div class="hero-copy">
+          <p class="hero__sub-jp">連続する日常に、ほんの少しのスパイスを。</p>
+          <p class="hero__sub-en">Creative Label Based in Japan</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- S2 Scroll-driven Parallax Typography (3 rows) -->
+    <!-- Spec: row1 left→right, row2 right→left, row3 left→right. Bound to scroll progress. -->
+    <section class="scroll-type" aria-hidden="true">
+      <div class="scroll-type__row">
+        <div class="scroll-type__track" data-parallax="320" data-base="-160">
+          <span class="scroll-type__text">222222222<span class="scroll-type__accent">3</span>2222222222222 &nbsp; 222222<span class="scroll-type__accent scroll-type__accent--teal">3</span>22222222222 &nbsp; 22222222<span class="scroll-type__accent scroll-type__accent--lime">3</span>2222222</span>
+        </div>
+      </div>
+      <div class="scroll-type__row scroll-type__row--brand">
+        <div class="scroll-type__track" data-parallax="-380" data-base="120">
+          <span class="scroll-type__text">22<span class="scroll-type__accent--cyan">3</span>2.inc &nbsp; 22<span class="scroll-type__accent--yellow">3</span>2.inc &nbsp; 22<span class="scroll-type__accent--pink">3</span>2.inc &nbsp; 22<span class="scroll-type__accent--lime">3</span>2.inc &nbsp; 22<span class="scroll-type__accent--magenta">3</span>2.inc</span>
+        </div>
+      </div>
+      <div class="scroll-type__row">
+        <div class="scroll-type__track" data-parallax="260" data-base="-200">
+          <span class="scroll-type__text">2222222<span class="scroll-type__accent scroll-type__accent--lime">3</span>22222222222 &nbsp; 2222222222<span class="scroll-type__accent">3</span>22222 &nbsp; 22222<span class="scroll-type__accent scroll-type__accent--teal">3</span>222222222</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- S3 Manifesto -->
+    <section class="section manifesto reveal">
+      <div class="container">
+        <p class="manifesto__body">
+          <span class="line">2232.inc is a <em>creative label</em></span>
+          <span class="line">based in Japan.</span>
+          <span class="line">&nbsp;</span>
+          <span class="line">We create subtle disruptions</span>
+          <span class="line">for ordinary everyday experiences.</span>
+        </p>
+      </div>
+    </section>
+
+    <!-- S5 Closing -->
+    <section class="section closing reveal">
+      <div class="container">
+        <p class="closing__line">Let&rsquo;s create <em>something memorable.</em></p>
+        <a class="closing__cta" href="https://www.2232gallery.com/" target="_blank" rel="noopener">Open Gallery</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__brand" aria-label="2232.inc">
+      <img src="assets/logo-fv.svg" alt="2232.inc" class="footer__brand-img" />
+    </p>
+    <div class="footer__sns">
+      <a href="https://www.2232gallery.com/" target="_blank" rel="noopener">Gallery</a>
+    </div>
+    <p class="footer__copy">© 2026 2232.inc — All Rights Reserved</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

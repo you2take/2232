@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — 2232.inc</title>
+  <meta name="description" content="Let's create something memorable. — 2232.inc" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Contact — 2232.inc" />
+  <meta property="og:description" content="Let's create something memorable. — 2232.inc" />
+  <meta property="og:image" content="assets/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale" content="ja_JP" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Contact — 2232.inc" />
+  <meta name="twitter:description" content="Let's create something memorable." />
+  <meta name="twitter:image" content="assets/og.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Cormorant+Garamond:ital,wght@1,400;1,500&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="header">
+    <a href="index.html" class="header__logo" aria-label="2232.inc">
+      <img src="assets/logo-white.svg" alt="2232.inc" class="header__logo-img" />
+    </a>
+    <button class="header__burger" aria-label="Menu" type="button">
+      <span></span><span></span>
+    </button>
+    <nav class="header__nav" aria-label="Global">
+      <a href="about.html">About</a>
+      <a href="https://www.2232gallery.com/" target="_blank" rel="noopener">Gallery&nbsp;↗</a>
+      <a href="contact.html" class="is-active">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="container contact-lead">
+      <h1 class="contact-lead__title">Let&rsquo;s create <em>something memorable.</em></h1>
+      <p class="contact-lead__sub">Drop us a line below.</p>
+    </section>
+
+    <section class="container">
+      <form class="contact-form" novalidate>
+        <div class="contact-form__row">
+          <input class="contact-form__input" type="text" name="name" placeholder="Name" aria-label="Name" required />
+        </div>
+        <div class="contact-form__row">
+          <input class="contact-form__input" type="email" name="email" placeholder="Email" aria-label="Email" required />
+        </div>
+        <div class="contact-form__row">
+          <textarea class="contact-form__textarea" name="message" placeholder="Message" aria-label="Message" required></textarea>
+        </div>
+        <button class="contact-form__submit" type="submit">Send</button>
+      </form>
+    </section>
+
+    <section class="container contact-direct reveal">
+      <p class="contact-direct__label">Or email us directly</p>
+      <a class="contact-direct__email" href="mailto:hello@2232.inc">hello@2232.inc</a>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__brand" aria-label="2232.inc">
+      <img src="assets/logo-fv.svg" alt="2232.inc" class="footer__brand-img" />
+    </p>
+    <div class="footer__sns">
+      <a href="https://www.2232gallery.com/" target="_blank" rel="noopener">Gallery</a>
+    </div>
+    <p class="footer__copy">© 2026 2232.inc — All Rights Reserved</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
