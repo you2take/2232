@@ -163,7 +163,10 @@ const groupOf = (w) =>
 const groupCount = (key) => works.filter((w) => groupOf(w) === key).length;
 
 const tags = (w) =>
-  `<span class="gallery-meta">${w.tags.map((t) => `<span>${esc(t)}</span>`).join('')}</span>`;
+  `<span class="gallery-meta" data-tone="${groupOf(w)}"><span class="gallery-meta__cat">${esc(w.tags[0])}</span>${w.tags
+    .slice(1)
+    .map((t) => `<span>${esc(t)}</span>`)
+    .join('')}</span>`;
 
 const PERSON = {
   '@type': 'Person',
@@ -196,6 +199,12 @@ const listHtml =
         name: 'Gallery — 2232.inc',
         url: listUrl,
         author: PERSON,
+        publisher: {
+          '@type': 'Organization',
+          name: '2232.inc',
+          alternateName: ['株式会社2232', 'にーにーさんにー', 'ニーニーサンニー'],
+          url: `${ORIGIN}/`,
+        },
         mainEntity: {
           '@type': 'ItemList',
           numberOfItems: works.length,
@@ -221,7 +230,7 @@ const listHtml =
       <div class="gallery-bar">
         <div class="gallery-filter" role="group" aria-label="種類で絞り込む">
           <button type="button" class="gallery-filter__btn is-active" data-filter="all" aria-pressed="true">All<sup>${works.length}</sup></button>
-${GROUPS.map(([key, label]) => `          <button type="button" class="gallery-filter__btn" data-filter="${key}" aria-pressed="false">${label}<sup>${groupCount(key)}</sup></button>`).join('\n')}
+${GROUPS.map(([key, label]) => `          <button type="button" class="gallery-filter__btn" data-filter="${key}" data-tone="${key}" aria-pressed="false">${label}<sup>${groupCount(key)}</sup></button>`).join('\n')}
         </div>
         <div class="gallery-view" role="group" aria-label="表示の切り替え">
           <button type="button" class="gallery-view__btn is-active" data-view="visual" aria-pressed="true">Visual</button>
@@ -233,7 +242,7 @@ ${GROUPS.map(([key, label]) => `          <button type="button" class="gallery-f
 ${works
   .map((w, i) => {
     const [span, start, mt, large] = RHYTHM[i % RHYTHM.length];
-    return `        <li class="gallery-visual__item${large ? ' is-large' : ''}" data-group="${groupOf(w)}" style="--span:${span};--start:${start};--mt:${mt}px">
+    return `        <li class="gallery-visual__item${large ? ' is-large' : ''}" data-group="${groupOf(w)}" data-tone="${groupOf(w)}" style="--span:${span};--start:${start};--mt:${mt}px">
           <a class="gallery-work" href="/gallery/${w.key}.html">
             <span class="gallery-work__media"><img src="/assets/gallery/thumbs/${w.key}.webp" alt="${esc(plain(w.name))}" width="640" height="400" loading="${i < 4 ? 'eager' : 'lazy'}" decoding="async" /></span>
             <span class="gallery-work__caption">
@@ -256,7 +265,7 @@ ${works
           <a class="gallery-index__row" href="/gallery/${w.key}.html" data-preview="/assets/gallery/thumbs/${w.key}.webp">
             <span class="gallery-index__num">${pad(i + 1)}</span>
             <span class="gallery-index__title">${jp(w.name)}</span>
-            <span class="gallery-index__cat">${esc(w.tags[0])}</span>
+            <span class="gallery-index__cat" data-tone="${groupOf(w)}">${esc(w.tags[0])}</span>
             <span class="gallery-index__ind">${esc(w.tags.slice(1).join(' / '))}</span>
           </a>
         </li>`,
@@ -317,10 +326,10 @@ works.forEach((w, i) => {
     }) +
     `
   <main>
-    <article class="gallery-detail">
+    <article class="gallery-detail" data-tone="${groupOf(w)}">
       <header class="container gallery-detail__head">
         <nav class="gallery-detail__crumb" aria-label="パンくず">
-          <a href="/gallery/">Gallery</a><span aria-hidden="true">/</span><span>${esc(w.tags[0])}</span>
+          <a href="/gallery/">Gallery</a><span aria-hidden="true">/</span><span class="gallery-tone">${esc(w.tags[0])}</span>
         </nav>
         <div class="gallery-detail__plate">
           <p class="gallery-detail__num" aria-label="No.${pad(i + 1)}">${pad(i + 1)}</p>
@@ -338,7 +347,7 @@ works.forEach((w, i) => {
       <section class="container gallery-detail__info">
         <p class="gallery-detail__text">${jp(w.text)}</p>
         <dl class="about-info__grid gallery-detail__spec">
-          <dt>Category</dt><dd>${esc(w.tags[0])}</dd>${
+          <dt>Category</dt><dd class="gallery-tone">${esc(w.tags[0])}</dd>${
             w.tags[1] ? `
           <dt>Industry</dt><dd>${esc(w.tags.slice(1).join(' / '))}</dd>` : ''
           }

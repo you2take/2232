@@ -7,7 +7,15 @@
   const viewButtons = root.querySelectorAll('[data-view]');
   const visual = root.querySelector('[data-gallery-visual]');
   const index = root.querySelector('[data-gallery-index]');
+  // Visual view shows the works in a random order on every visit.
+  // Plate numbers stay with each work (they match the detail pages); Index keeps number order.
   const visualItems = [...visual.children];
+  for (let i = visualItems.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [visualItems[i], visualItems[j]] = [visualItems[j], visualItems[i]];
+  }
+  visual.append(...visualItems);
+  visualItems.slice(0, 4).forEach((li) => li.querySelector('img')?.setAttribute('loading', 'eager'));
   const indexItems = [...index.children];
   const count = document.querySelector('[data-gallery-count]');
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -48,9 +56,11 @@
     if (count) count.textContent = String(n);
   };
 
+  // Index view inverts the whole page (see html.is-inverted in style.css).
   const applyView = (view) => {
     visual.hidden = view !== 'visual';
     index.hidden = view !== 'index';
+    document.documentElement.classList.toggle('is-inverted', view === 'index');
     press(viewButtons, 'view', view);
   };
 
@@ -84,7 +94,7 @@
   );
 
   const [initialFilter, initialView] = readHash();
-  if (initialFilter !== 'all') applyFilter(initialFilter);
+  applyFilter(initialFilter); // also lays out the shuffled order
   if (initialView !== 'visual') applyView(initialView);
 
   // Visual view: rise in once when each work enters the viewport.
@@ -103,6 +113,53 @@
       li.classList.add('is-pending');
       io.observe(li);
     });
+  }
+
+  // Visual view: scroll parallax. Each work lags behind the scroll at its own random
+  // speed, so the thumbnails drift down irregularly. Applied to the inner link so the
+  // li keeps its true position for measuring (and for the reveal transition).
+  if (!reduce) {
+    const amp = window.matchMedia('(max-width: 768px)').matches ? 0.5 : 1;
+    const works = visualItems.map((li) => ({
+      li,
+      el: li.querySelector('.gallery-work'),
+      speed: (0.06 + Math.random() * 0.18) * amp, // 0.06–0.24 of the distance from viewport center
+    }));
+    const onScreen = new Set();
+    let ticking = false;
+    const pio = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          const w = works.find((x) => x.li === e.target);
+          if (e.isIntersecting) onScreen.add(w);
+          else onScreen.delete(w);
+        });
+        request(); // place works that just came into range
+      },
+      { rootMargin: '50% 0px' },
+    );
+    works.forEach((w) => pio.observe(w.li));
+    const render = () => {
+      ticking = false;
+      if (visual.hidden) return;
+      const mid = window.innerHeight / 2;
+      onScreen.forEach(({ li, el, speed }) => {
+        const r = li.getBoundingClientRect();
+        const offset = Math.max(-window.innerHeight, Math.min(window.innerHeight, r.top + r.height / 2 - mid));
+        el.style.transform = `translate3d(0, ${(-offset * speed).toFixed(1)}px, 0)`;
+      });
+    };
+    function request() {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(render);
+      }
+    }
+    window.addEventListener('scroll', request, { passive: true });
+    window.addEventListener('resize', request);
+    viewButtons.forEach((b) => b.addEventListener('click', request));
+    filterButtons.forEach((b) => b.addEventListener('click', request));
+    request();
   }
 
   // Index view: screenshot follows the cursor (pointer devices only).

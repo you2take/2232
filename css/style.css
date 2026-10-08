@@ -891,7 +891,19 @@ img {
 
 /* ---------- Gallery ---------- */
 /* Layout from AIDesigner run 373b4bfa (boutique archive), ported to site tokens.
-   The single page accent is magenta: the 1px hover ring on works only. */
+   Categories are color-coded with the site's neon palette (--tone);
+   the hover ring falls back to magenta for works outside the groups. */
+[data-tone="recruit"]   { --tone: #FF1F8C; } /* neon--pink   */
+[data-tone="corporate"] { --tone: #00F0FF; } /* neon--cyan   */
+[data-tone="brand"]     { --tone: #B91FFF; } /* neon--violet */
+[data-tone="service"]   { --tone: #00FFA8; } /* neon--mint   */
+[data-tone="campaign"]  { --tone: #E5FF00; } /* neon--yellow */
+[data-tone="media"]     { --tone: #B6FF3D; } /* neon--lime   */
+
+.gallery-meta__cat,
+.gallery-index__cat[data-tone],
+[data-tone] .gallery-tone,
+.about-info__grid dd.gallery-tone { color: var(--tone, inherit); }
 .gallery-intro {
   position: relative;
   padding-block: calc(var(--space-2xl) + 40px) var(--space-xl);
@@ -923,7 +935,7 @@ img {
   font-family: var(--font-serif);
   font-style: italic;
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.9);
+  color: color-mix(in srgb, var(--ink) 90%, transparent);
 }
 
 .gallery-intro__count {
@@ -941,7 +953,7 @@ img {
   font-weight: 400;
   font-size: clamp(40px, 5vw, 72px);
   line-height: 1;
-  color: rgba(255, 255, 255, 0.9);
+  color: color-mix(in srgb, var(--ink) 90%, transparent);
 }
 
 .gallery-intro__count small {
@@ -951,11 +963,10 @@ img {
   font-weight: 400;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.4);
+  color: color-mix(in srgb, var(--ink) 40%, transparent);
 }
 
 .gallery-intro__lead {
-  max-width: 32em;
   margin-top: var(--space-lg);
   font-family: var(--font-jp);
   font-size: 16px;
@@ -1013,7 +1024,7 @@ img {
   font-weight: 500;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.4);
+  color: color-mix(in srgb, var(--ink) 40%, transparent);
 }
 
 .gallery-filter__btn:hover,
@@ -1023,6 +1034,16 @@ img {
 .gallery-view__btn.is-active {
   color: var(--ink);
   border-bottom-color: var(--ink);
+}
+
+.gallery-filter__btn[data-tone] { color: var(--tone); opacity: 0.75; transition: opacity 240ms ease, border-color 240ms ease; }
+.gallery-filter__btn[data-tone]:hover { opacity: 1; }
+
+.gallery-filter__btn[data-tone].is-active {
+  color: var(--tone);
+  opacity: 1;
+  border-bottom-color: var(--tone);
+  text-shadow: 0 0 18px var(--tone);
 }
 
 /* Visual view — asymmetric 12-col editorial rhythm (--span / --start / --mt per work) */
@@ -1055,7 +1076,10 @@ img {
   transform: none;
 }
 
-.gallery-work { display: block; }
+.gallery-work {
+  display: block;
+  will-change: transform; /* scroll parallax from js/gallery.js */
+}
 
 .gallery-work__media {
   position: relative;
@@ -1075,7 +1099,7 @@ img {
 }
 
 .gallery-work:hover .gallery-work__media::after,
-.gallery-work:focus-visible .gallery-work__media::after { border-color: var(--accent-magenta); }
+.gallery-work:focus-visible .gallery-work__media::after { border-color: var(--tone, var(--accent-magenta)); }
 
 .gallery-work__media img {
   width: 100%;
@@ -1102,7 +1126,7 @@ img {
   font-style: italic;
   font-size: 20px;
   line-height: 1;
-  color: rgba(255, 255, 255, 0.5);
+  color: color-mix(in srgb, var(--ink) 50%, transparent);
 }
 
 .gallery-work__title {
@@ -1154,14 +1178,14 @@ img {
   transition: background-color 400ms ease;
 }
 
-.gallery-index__row:hover { background: rgba(255, 255, 255, 0.02); }
+.gallery-index__row:hover { background: color-mix(in srgb, var(--ink) 3%, transparent); }
 
 .gallery-index__num {
   font-family: var(--font-serif);
   font-style: italic;
   font-size: 20px;
   line-height: 1;
-  color: rgba(255, 255, 255, 0.5);
+  color: color-mix(in srgb, var(--ink) 50%, transparent);
 }
 
 .gallery-index__title {
@@ -1267,7 +1291,7 @@ img {
   font-style: italic;
   font-size: clamp(96px, 14vw, 200px);
   line-height: 0.8;
-  color: rgba(255, 255, 255, 0.9);
+  color: color-mix(in srgb, var(--ink) 90%, transparent);
 }
 
 .gallery-detail__title {
@@ -1346,7 +1370,7 @@ img {
   font-style: italic;
   font-size: clamp(64px, 8vw, 120px);
   line-height: 0.8;
-  color: rgba(255, 255, 255, 0.5);
+  color: color-mix(in srgb, var(--ink) 50%, transparent);
   transition: color 400ms ease;
 }
 
@@ -1427,8 +1451,48 @@ img {
   .gallery-next__sub { flex-direction: column; align-items: flex-start; }
 }
 
+/* Index view: whole-page color inversion (class set by js/gallery.js).
+   Swaps the base tokens to white paper / black ink and the category tones to
+   darker versions of the same neon hues so they stay legible on white.
+   Logo images are flipped with invert + hue-rotate (white → black, lime stays green). */
+html.is-inverted {
+  --bg: #FFFFFF;
+  --bg-soft: #F4F4F4;
+  --bg-elev: #EDEDED;
+  --ink: #000000;
+  --ink-muted: rgba(0, 0, 0, 0.6);
+  --ink-faint: rgba(0, 0, 0, 0.45);
+  --line: rgba(0, 0, 0, 0.12);
+  --line-active: #000000;
+}
+
+html.is-inverted [data-tone="recruit"]   { --tone: #E0006E; }
+html.is-inverted [data-tone="corporate"] { --tone: #008BA0; }
+html.is-inverted [data-tone="brand"]     { --tone: #8A00D6; }
+html.is-inverted [data-tone="service"]   { --tone: #00986A; }
+html.is-inverted [data-tone="campaign"]  { --tone: #7D8C00; }
+html.is-inverted [data-tone="media"]     { --tone: #4F8F00; }
+
+/* The fixed header already reads on any background through mix-blend-mode: difference,
+   so it keeps the dark-theme tokens (white ink) instead of being inverted. */
+html.is-inverted .header {
+  --bg: #000000;
+  --ink: #FFFFFF;
+  --ink-muted: rgba(255, 255, 255, 0.6);
+  --ink-faint: rgba(255, 255, 255, 0.32);
+  --line: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF; /* nav links inherit color, not the token */
+}
+html.is-inverted .footer__brand-img { filter: invert(1) hue-rotate(180deg); }
+html.is-inverted .gallery-filter__btn[data-tone].is-active { text-shadow: none; }
+html.is-inverted .gallery-intro::before { display: none; }
+
+html, body { transition: background-color 600ms ease, color 600ms ease; }
+.footer__brand-img { transition: filter 600ms ease; }
+
 @media (prefers-reduced-motion: reduce) {
   .gallery-visual__item.is-pending { opacity: 1; transform: none; transition: none; }
+  html, body, .footer__brand-img { transition: none; }
 }
 
 /* ---------- Contact Page ---------- */
