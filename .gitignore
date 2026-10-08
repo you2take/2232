@@ -20,3 +20,6 @@ assets/logo.svg
 
 # Script deps
 scripts/node_modules/
+
+# AIDesigner design artifacts (local only)
+.aidesigner/

@@ -148,8 +148,6 @@ const foot = `
 `;
 
 const ARROW_OUT = `<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 12 12 4M4 4h8v8" stroke="currentColor" stroke-width="1.5"/></svg>`;
-const ARROW_L = `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m9.5 4-4 4 4 4" stroke="currentColor" stroke-width="1.5"/></svg>`;
-const ARROW_R = `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m6.5 4 4 4-4 4" stroke="currentColor" stroke-width="1.5"/></svg>`;
 
 // Filter groups on the list page, keyed by the first tag (= site type).
 const GROUPS = [
@@ -173,6 +171,15 @@ const PERSON = {
   name: '竹岸勇人',
   alternateName: ['Yuto Takegishi', 'タケギシ ユウト'],
 };
+
+// Editorial rhythm for the Visual view (from the AIDesigner run 373b4bfa):
+// [column span, column start, top offset px, large caption]. Repeats every 18 works.
+// js/gallery.js re-applies it to the visible works when a filter is active.
+const RHYTHM = [
+  [9, 4, 0, 1], [4, 1, 0, 0], [6, 7, 128, 0], [8, 3, 64, 1], [6, 1, 0, 0], [4, 9, 96, 0],
+  [8, 5, 32, 1], [4, 1, 64, 0], [6, 7, 160, 0], [7, 1, 64, 1], [4, 9, 32, 0], [5, 3, 96, 0],
+  [5, 8, 48, 0], [8, 1, 128, 1], [3, 10, 96, 0], [6, 4, 128, 0], [7, 6, 64, 1], [8, 2, 96, 1],
+];
 
 // ---------- List ----------
 const listUrl = `${ORIGIN}/gallery/`;
@@ -206,66 +213,61 @@ const listHtml =
   <main>
     <section class="container gallery-intro">
       <p class="about-intro__label">Gallery</p>
-      <div class="gallery-intro__row">
-        <h1 class="gallery-intro__title">Selected <em>works.</em></h1>
-        <p class="gallery-intro__count" aria-label="${works.length} projects"><span data-gallery-count>${pad(works.length)}</span><small>Projects</small></p>
-      </div>
+      <h1 class="gallery-intro__title">Selected <em>works.</em><span class="gallery-intro__count"><span data-gallery-count>${works.length}</span><small>Projects</small></span></h1>
       <p class="gallery-intro__lead" lang="ja">${jp('竹岸勇人（タケギシ ユウト）がプロデュースしたWebサイトの一部です。')}</p>
     </section>
 
     <section class="container gallery-list" data-gallery>
-      <div class="gallery-filter" role="group" aria-label="種類で絞り込む">
-        <button type="button" class="gallery-filter__btn is-active" data-filter="all" aria-pressed="true">All<sup>${works.length}</sup></button>
-${GROUPS.map(([key, label]) => `        <button type="button" class="gallery-filter__btn" data-filter="${key}" aria-pressed="false">${label}<sup>${groupCount(key)}</sup></button>`).join('\n')}
+      <div class="gallery-bar">
+        <div class="gallery-filter" role="group" aria-label="種類で絞り込む">
+          <button type="button" class="gallery-filter__btn is-active" data-filter="all" aria-pressed="true">All<sup>${works.length}</sup></button>
+${GROUPS.map(([key, label]) => `          <button type="button" class="gallery-filter__btn" data-filter="${key}" aria-pressed="false">${label}<sup>${groupCount(key)}</sup></button>`).join('\n')}
+        </div>
+        <div class="gallery-view" role="group" aria-label="表示の切り替え">
+          <button type="button" class="gallery-view__btn is-active" data-view="visual" aria-pressed="true">Visual</button>
+          <button type="button" class="gallery-view__btn" data-view="index" aria-pressed="false">Index</button>
+        </div>
       </div>
-      <ul class="gallery-grid">
+
+      <ul class="gallery-visual" data-gallery-visual>
+${works
+  .map((w, i) => {
+    const [span, start, mt, large] = RHYTHM[i % RHYTHM.length];
+    return `        <li class="gallery-visual__item${large ? ' is-large' : ''}" data-group="${groupOf(w)}" style="--span:${span};--start:${start};--mt:${mt}px">
+          <a class="gallery-work" href="/gallery/${w.key}.html">
+            <span class="gallery-work__media"><img src="/assets/gallery/thumbs/${w.key}.webp" alt="${esc(plain(w.name))}" width="640" height="400" loading="${i < 4 ? 'eager' : 'lazy'}" decoding="async" /></span>
+            <span class="gallery-work__caption">
+              <span class="gallery-work__num">${pad(i + 1)}</span>
+              <span class="gallery-work__text">
+                <span class="gallery-work__title">${jp(w.name)}</span>
+                ${tags(w)}
+              </span>
+            </span>
+          </a>
+        </li>`;
+  })
+  .join('\n')}
+      </ul>
+
+      <ol class="gallery-index" data-gallery-index hidden>
 ${works
   .map(
-    (w, i) => `        <li class="gallery-grid__item" data-group="${groupOf(w)}">
-          <a class="gallery-card" href="/gallery/${w.key}.html">
-            <span class="gallery-card__media"><img src="/assets/gallery/thumbs/${w.key}.webp" alt="${esc(plain(w.name))}" width="640" height="400" loading="${i < 6 ? 'eager' : 'lazy'}" decoding="async" /></span>
-            <span class="gallery-card__body">
-              <span class="gallery-card__num">${pad(i + 1)}</span>
-              <span class="gallery-card__title">${jp(w.name)}</span>
-              ${tags(w)}
-            </span>
+    (w, i) => `        <li data-group="${groupOf(w)}">
+          <a class="gallery-index__row" href="/gallery/${w.key}.html" data-preview="/assets/gallery/thumbs/${w.key}.webp">
+            <span class="gallery-index__num">${pad(i + 1)}</span>
+            <span class="gallery-index__title">${jp(w.name)}</span>
+            <span class="gallery-index__cat">${esc(w.tags[0])}</span>
+            <span class="gallery-index__ind">${esc(w.tags.slice(1).join(' / '))}</span>
           </a>
         </li>`,
   )
   .join('\n')}
-      </ul>
+      </ol>
+      <div class="gallery-preview" data-gallery-preview aria-hidden="true"><img alt="" width="640" height="400" /></div>
     </section>
   </main>
 ` +
-  foot.replace('</body>', `  <script>
-  (() => {
-    const root = document.querySelector('[data-gallery]');
-    if (!root) return;
-    const buttons = root.querySelectorAll('[data-filter]');
-    const items = root.querySelectorAll('[data-group]');
-    const count = document.querySelector('[data-gallery-count]');
-    const apply = (key) => {
-      let n = 0;
-      items.forEach((li) => {
-        const show = key === 'all' || li.dataset.group === key;
-        li.hidden = !show;
-        if (show) n++;
-      });
-      buttons.forEach((b) => {
-        const on = b.dataset.filter === key;
-        b.classList.toggle('is-active', on);
-        b.setAttribute('aria-pressed', String(on));
-      });
-      if (count) count.textContent = String(n).padStart(2, '0');
-    };
-    buttons.forEach((b) => b.addEventListener('click', () => {
-      apply(b.dataset.filter);
-      history.replaceState(null, '', b.dataset.filter === 'all' ? location.pathname : '#' + b.dataset.filter);
-    }));
-    const initial = location.hash.slice(1);
-    if (initial && root.querySelector('[data-filter="' + initial + '"]')) apply(initial);
-  })();
-  </script>
+  foot.replace('</body>', `  <script src="/js/gallery.js"></script>
 </body>`);
 
 fs.mkdirSync(path.join(SITE, 'gallery'), { recursive: true });
@@ -320,8 +322,13 @@ works.forEach((w, i) => {
         <nav class="gallery-detail__crumb" aria-label="パンくず">
           <a href="/gallery/">Gallery</a><span aria-hidden="true">/</span><span>${esc(w.tags[0])}</span>
         </nav>
-        <p class="gallery-detail__num">No.<span>${pad(i + 1)}</span></p>
-        <h1 class="gallery-detail__title">${jp(w.name)}</h1>
+        <div class="gallery-detail__plate">
+          <p class="gallery-detail__num" aria-label="No.${pad(i + 1)}">${pad(i + 1)}</p>
+          <div class="gallery-detail__heading">
+            <h1 class="gallery-detail__title">${jp(w.name)}</h1>
+            ${tags(w)}
+          </div>
+        </div>
       </header>
 
       <figure class="container gallery-detail__capture">
@@ -346,15 +353,13 @@ works.forEach((w, i) => {
 
       <nav class="container gallery-next" aria-label="ほかの実績">
         <a class="gallery-next__main" href="/gallery/${next.key}.html">
-          <span class="gallery-next__label">Next project <span class="gallery-next__count">${pad(((i + 1) % works.length) + 1)} / ${pad(works.length)}</span></span>
+          <span class="gallery-next__label">Next project</span>
+          <span class="gallery-next__num">${pad(((i + 1) % works.length) + 1)}</span>
           <span class="gallery-next__name">${jp(next.name)}</span>
           <span class="gallery-next__thumb"><img src="/assets/gallery/thumbs/${next.key}.webp" alt="" width="640" height="400" loading="lazy" decoding="async" /></span>
         </a>
         <div class="gallery-next__sub">
-          <a href="/gallery/${prev.key}.html" class="gallery-next__prev">
-            <span class="circle-arrow" aria-hidden="true">${ARROW_L}</span>
-            <span><small>Prev</small>${jp(prev.name)}</span>
-          </a>
+          <a href="/gallery/${prev.key}.html" class="gallery-next__prev"><span class="gallery-next__arrow" aria-hidden="true">←</span><small>Prev</small>${jp(prev.name)}</a>
           <a href="/gallery/" class="closing__cta">All works</a>
         </div>
       </nav>

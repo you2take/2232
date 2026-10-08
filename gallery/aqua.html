@@ -65,8 +65,13 @@
         <nav class="gallery-detail__crumb" aria-label="パンくず">
           <a href="/gallery/">Gallery</a><span aria-hidden="true">/</span><span>ブランドサイト</span>
         </nav>
-        <p class="gallery-detail__num">No.<span>27</span></p>
-        <h1 class="gallery-detail__title">AQUA</h1>
+        <div class="gallery-detail__plate">
+          <p class="gallery-detail__num" aria-label="No.27">27</p>
+          <div class="gallery-detail__heading">
+            <h1 class="gallery-detail__title">AQUA</h1>
+            <span class="gallery-meta"><span>ブランドサイト</span><span>家電</span></span>
+          </div>
+        </div>
       </header>
 
       <figure class="container gallery-detail__capture">
@@ -85,15 +90,13 @@
 
       <nav class="container gallery-next" aria-label="ほかの実績">
         <a class="gallery-next__main" href="/gallery/siell.html">
-          <span class="gallery-next__label">Next project <span class="gallery-next__count">28 / 61</span></span>
+          <span class="gallery-next__label">Next project</span>
+          <span class="gallery-next__num">28</span>
           <span class="gallery-next__name">SHELL</span>
           <span class="gallery-next__thumb"><img src="/assets/gallery/thumbs/siell.webp" alt="" width="640" height="400" loading="lazy" decoding="async" /></span>
         </a>
         <div class="gallery-next__sub">
-          <a href="/gallery/rakuten-optimism.html" class="gallery-next__prev">
-            <span class="circle-arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m9.5 4-4 4 4 4" stroke="currentColor" stroke-width="1.5"/></svg></span>
-            <span><small>Prev</small>Rakuten OPTIMISM</span>
-          </a>
+          <a href="/gallery/rakuten-optimism.html" class="gallery-next__prev"><span class="gallery-next__arrow" aria-hidden="true">←</span><small>Prev</small>Rakuten OPTIMISM</a>
           <a href="/gallery/" class="closing__cta">All works</a>
         </div>
       </nav>

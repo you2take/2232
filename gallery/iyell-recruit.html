@@ -65,8 +65,13 @@
         <nav class="gallery-detail__crumb" aria-label="パンくず">
           <a href="/gallery/">Gallery</a><span aria-hidden="true">/</span><span>採用サイト</span>
         </nav>
-        <p class="gallery-detail__num">No.<span>24</span></p>
-        <h1 class="gallery-detail__title">iYell 新卒採用サイト</h1>
+        <div class="gallery-detail__plate">
+          <p class="gallery-detail__num" aria-label="No.24">24</p>
+          <div class="gallery-detail__heading">
+            <h1 class="gallery-detail__title">iYell 新卒採用サイト</h1>
+            <span class="gallery-meta"><span>採用サイト</span><span>金融</span></span>
+          </div>
+        </div>
       </header>
 
       <figure class="container gallery-detail__capture">
@@ -85,15 +90,13 @@
 
       <nav class="container gallery-next" aria-label="ほかの実績">
         <a class="gallery-next__main" href="/gallery/fsc-forest-week.html">
-          <span class="gallery-next__label">Next project <span class="gallery-next__count">25 / 61</span></span>
+          <span class="gallery-next__label">Next project</span>
+          <span class="gallery-next__num">25</span>
           <span class="gallery-next__name">FSC FOREST WEEK 2019</span>
           <span class="gallery-next__thumb"><img src="/assets/gallery/thumbs/fsc-forest-week.webp" alt="" width="640" height="400" loading="lazy" decoding="async" /></span>
         </a>
         <div class="gallery-next__sub">
-          <a href="/gallery/iyell.html" class="gallery-next__prev">
-            <span class="circle-arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m9.5 4-4 4 4 4" stroke="currentColor" stroke-width="1.5"/></svg></span>
-            <span><small>Prev</small>iYell</span>
-          </a>
+          <a href="/gallery/iyell.html" class="gallery-next__prev"><span class="gallery-next__arrow" aria-hidden="true">←</span><small>Prev</small>iYell</a>
           <a href="/gallery/" class="closing__cta">All works</a>
         </div>
       </nav>
