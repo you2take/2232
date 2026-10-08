@@ -22,6 +22,17 @@ const TODAY = new Date().toISOString().slice(0, 10);
 const works = JSON.parse(
   fs.readFileSync(path.join(SRC, 'docs/atrun-handoff/works.json'), 'utf8'),
 );
+// Descriptions are rewritten for 2232 so they don't duplicate AtRun's text.
+// New works must get an entry in gallery-text.json before the build passes.
+const rewritten = JSON.parse(
+  fs.readFileSync(path.join(SITE, 'scripts/gallery-text.json'), 'utf8'),
+);
+const missing = works.filter((w) => !rewritten[w.key]).map((w) => w.key);
+if (missing.length) {
+  console.error(`gallery-text.json に未リライトの実績があります: ${missing.join(', ')}`);
+  process.exit(1);
+}
+for (const w of works) w.text = rewritten[w.key];
 const parser = loadDefaultJapaneseParser();
 
 const esc = (v) =>
