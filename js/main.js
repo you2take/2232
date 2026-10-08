@@ -1,4 +1,5 @@
-/* 2232.inc — site-wide interactions (hero, scroll type, header menu, reveal) */
+/* 2232.inc — site-wide interactions (hero, scroll type, header menu, reveal).
+   The contact form lives in js/contact.js. */
 (() => {
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -161,12 +162,4 @@
     targets.forEach((t) => t.classList.add('is-visible'));
   }
 
-  // --- Contact form (dummy submit) ---
-  const form = document.querySelector('.contact-form');
-  if (form) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      form.innerHTML = '<p style="font-size:24px;color:var(--ink-muted);padding:32px 0;">Thank you. We&rsquo;ll be in touch.</p>';
-    });
-  }
 })();

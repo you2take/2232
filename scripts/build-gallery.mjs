@@ -55,12 +55,18 @@ const thumbDir = path.join(SITE, 'assets/gallery/thumbs');
 const fullDir = path.join(SITE, 'assets/gallery/full');
 fs.mkdirSync(thumbDir, { recursive: true });
 fs.mkdirSync(fullDir, { recursive: true });
+// Copy only images that are new or whose size changed. Compares stat() only: Desktop is
+// synced by iCloud and reading an evicted ("dataless") file can stall or time out.
+const copyIfChanged = (from, to) => {
+  if (fs.existsSync(to) && fs.statSync(to).size === fs.statSync(from).size) return;
+  fs.writeFileSync(to, fs.readFileSync(from));
+};
 for (const w of works) {
-  fs.copyFileSync(
+  copyIfChanged(
     path.join(SRC, 'public/assets/captures/thumbs', `${w.key}.webp`),
     path.join(thumbDir, `${w.key}.webp`),
   );
-  fs.copyFileSync(
+  copyIfChanged(
     path.join(SRC, 'public', w.capture),
     path.join(fullDir, `${w.key}${path.extname(w.capture)}`),
   );
@@ -127,8 +133,19 @@ ${jsonld.map((j) => `  <script type="application/ld+json">${JSON.stringify(j)}</
     <nav class="header__nav" aria-label="Global">
       <a href="/about.html">About</a>
       <a href="/gallery/" class="is-active">Gallery</a>
+      <a href="/contact.html">Contact</a>
     </nav>
   </header>
+`;
+
+// Closing call to action shared by the list and detail pages (same as index/about).
+const CLOSING = `
+    <section class="section closing">
+      <div class="container">
+        <p class="closing__line">Let&rsquo;s create <em>something memorable.</em></p>
+        <a class="closing__cta" href="/contact.html">Contact</a>
+      </div>
+    </section>
 `;
 
 const foot = `
@@ -138,6 +155,7 @@ const foot = `
     </p>
     <div class="footer__sns">
       <a href="/gallery/">Gallery</a>
+      <a href="/contact.html">Contact</a>
     </div>
     <p class="footer__copy">© 2026 2232.inc — All Rights Reserved</p>
   </footer>
@@ -277,7 +295,7 @@ ${works
       </ol>
       <div class="gallery-preview" data-gallery-preview aria-hidden="true"></div>
     </section>
-  </main>
+${CLOSING}  </main>
 ` +
   foot.replace('</body>', `  <script src="/js/gallery.js"></script>
 </body>`);
@@ -385,7 +403,7 @@ works.forEach((w, i) => {
         </div>
       </nav>
     </article>
-  </main>
+${CLOSING}  </main>
 ` +
     foot;
   writePage(`gallery/${w.key}.html`, html, url);
