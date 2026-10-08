@@ -169,7 +169,7 @@ const PERSON = {
   '@type': 'Person',
   '@id': `${ORIGIN}/about.html#yuto-takegishi`,
   name: '竹岸勇人',
-  alternateName: ['Yuto Takegishi', 'タケギシ ユウト'],
+  alternateName: ['Yuto Takegishi', 'たけぎし　ゆうと'],
 };
 
 // Editorial rhythm for the Visual view (from the AIDesigner run 373b4bfa):
@@ -185,8 +185,8 @@ const RHYTHM = [
 const listUrl = `${ORIGIN}/gallery/`;
 const listHtml =
   head({
-    title: 'Gallery — 2232.inc（株式会社2232）| 竹岸勇人（タケギシ ユウト）の制作実績',
-    description: `2232.inc（株式会社2232）代表 竹岸勇人（タケギシ ユウト / Yuto Takegishi）がプロデュースしたWebサイトの制作実績${works.length}件。採用サイト、コーポレートサイト、ブランドサイト、キャンペーンサイトなど。`,
+    title: 'Gallery — 2232.inc（株式会社2232）| 竹岸勇人（たけぎし　ゆうと）の制作実績',
+    description: `2232.inc（株式会社2232）代表 竹岸勇人（たけぎし　ゆうと / Yuto Takegishi）がプロデュースしたWebサイトの制作実績${works.length}件。採用サイト、コーポレートサイト、ブランドサイト、キャンペーンサイトなど。`,
     url: listUrl,
     image: `${ORIGIN}/assets/gallery/thumbs/${works[0].key}.webp`,
     jsonld: [
@@ -214,7 +214,7 @@ const listHtml =
     <section class="container gallery-intro">
       <p class="about-intro__label">Gallery</p>
       <h1 class="gallery-intro__title">Selected <em>works.</em><span class="gallery-intro__count"><span data-gallery-count>${works.length}</span><small>Projects</small></span></h1>
-      <p class="gallery-intro__lead" lang="ja">${jp('竹岸勇人（タケギシ ユウト）がプロデュースしたWebサイトの一部です。')}</p>
+      <p class="gallery-intro__lead" lang="ja">${jp('竹岸勇人（たけぎし　ゆうと）がプロデュースしたWebサイトの一部です。')}</p>
     </section>
 
     <section class="container gallery-list" data-gallery>
