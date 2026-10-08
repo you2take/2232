@@ -1,0 +1,8 @@
+{
+  "name": "2232-site-scripts",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "budoux": "0.7.0"
+  }
+}

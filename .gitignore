@@ -17,3 +17,6 @@ aidesigner-v1.html
 # Asset backups / unused variants
 assets/logo-original.svg
 assets/logo.svg
+
+# Script deps
+scripts/node_modules/
