@@ -115,15 +115,18 @@
     });
   }
 
-  // Visual view: scroll parallax. Each work lags behind the scroll at its own random
-  // speed, so the thumbnails drift down irregularly. Applied to the inner link so the
-  // li keeps its true position for measuring (and for the reveal transition).
+  // Visual view: scroll parallax. From the moment a work enters the bottom of the
+  // viewport it lags behind the scroll at its own random speed, so the thumbnails drift
+  // down irregularly. Offsets are only ever downward (never up into the filter bar) and
+  // capped so neighbours don't collide. Applied to the inner link so the li keeps its
+  // true position for measuring (and for the reveal transition).
   if (!reduce) {
     const amp = window.matchMedia('(max-width: 768px)').matches ? 0.5 : 1;
+    const MAX_SHIFT = 140;
     const works = visualItems.map((li) => ({
       li,
       el: li.querySelector('.gallery-work'),
-      speed: (0.06 + Math.random() * 0.18) * amp, // 0.06–0.24 of the distance from viewport center
+      speed: 0.06 + Math.random() * 0.16, // 0.06–0.22 px per px scrolled since entering
     }));
     const onScreen = new Set();
     let ticking = false;
@@ -142,11 +145,11 @@
     const render = () => {
       ticking = false;
       if (visual.hidden) return;
-      const mid = window.innerHeight / 2;
+      const vh = window.innerHeight;
       onScreen.forEach(({ li, el, speed }) => {
-        const r = li.getBoundingClientRect();
-        const offset = Math.max(-window.innerHeight, Math.min(window.innerHeight, r.top + r.height / 2 - mid));
-        el.style.transform = `translate3d(0, ${(-offset * speed).toFixed(1)}px, 0)`;
+        const travelled = Math.max(0, vh - li.getBoundingClientRect().top);
+        const y = Math.min(MAX_SHIFT * amp, travelled * speed * amp);
+        el.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0)`;
       });
     };
     function request() {

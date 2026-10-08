@@ -993,7 +993,7 @@ img {
 .gallery-filter {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px 32px;
+  gap: 10px;
 }
 
 .gallery-filter__btn,
@@ -1036,14 +1036,28 @@ img {
   border-bottom-color: var(--ink);
 }
 
-.gallery-filter__btn[data-tone] { color: var(--tone); opacity: 0.75; transition: opacity 240ms ease, border-color 240ms ease; }
-.gallery-filter__btn[data-tone]:hover { opacity: 1; }
+/* Filter chips: solid tone fill with the label knocked out to the page color.
+   (Page color rather than white: white on the neon yellow / lime / cyan is unreadable.) */
+.gallery-filter__btn,
+.gallery-filter__btn.is-active {
+  padding: 7px 14px 8px;
+  border: 0;
+  background: var(--tone, var(--ink));
+  color: var(--bg);
+  font-weight: 400;
+  outline: 1px solid transparent;
+  outline-offset: 3px;
+  transition: opacity 240ms ease, box-shadow 240ms ease, outline-color 240ms ease;
+}
 
-.gallery-filter__btn[data-tone].is-active {
-  color: var(--tone);
+.gallery-filter__btn:hover { color: var(--bg); opacity: 0.8; }
+
+/* Active chip: an offset hairline ring plus a soft neon glow (all chips stay fully filled
+   so the knocked-out labels keep their contrast). */
+.gallery-filter__btn.is-active {
   opacity: 1;
-  border-bottom-color: var(--tone);
-  text-shadow: 0 0 18px var(--tone);
+  outline-color: var(--ink);
+  box-shadow: 0 0 24px color-mix(in srgb, var(--tone, var(--ink)) 45%, transparent);
 }
 
 /* Visual view — asymmetric 12-col editorial rhythm (--span / --start / --mt per work) */
@@ -1484,7 +1498,7 @@ html.is-inverted .header {
   color: #FFFFFF; /* nav links inherit color, not the token */
 }
 html.is-inverted .footer__brand-img { filter: invert(1) hue-rotate(180deg); }
-html.is-inverted .gallery-filter__btn[data-tone].is-active { text-shadow: none; }
+html.is-inverted .gallery-filter__btn.is-active { box-shadow: none; }
 html.is-inverted .gallery-intro::before { display: none; }
 
 html, body { transition: background-color 600ms ease, color 600ms ease; }
