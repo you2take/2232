@@ -806,6 +806,89 @@ img {
   .about-info__grid dd { padding-bottom: var(--space-md); }
 }
 
+/* Portrait */
+.about-portrait {
+  padding-block: 0;
+}
+
+.about-portrait__img {
+  width: 100%;
+  aspect-ratio: 1527 / 1030;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.04);
+}
+
+.about-portrait__caption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-xs) var(--space-md);
+  padding-top: var(--space-md);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: var(--space-md);
+}
+
+.about-portrait__name {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(24px, 2.4vw, 32px);
+  line-height: 1.2;
+}
+
+.about-portrait__role {
+  font-size: 13px;
+  color: var(--ink-faint);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.about-portrait__jp {
+  margin-left: auto;
+  font-family: var(--font-jp);
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--ink-faint);
+  letter-spacing: 0.12em;
+}
+
+@media (max-width: 640px) {
+  .about-portrait__jp { margin-left: 0; flex-basis: 100%; }
+}
+
+/* Japanese sub-labels (search keywords, kept quiet) */
+.about-direction__jp,
+.about-info__jp {
+  display: block;
+  font-family: var(--font-jp);
+  font-weight: 300;
+  color: var(--ink-faint);
+  letter-spacing: 0.12em;
+}
+
+.about-direction__list li:has(.about-direction__jp) {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: baseline;
+}
+
+.about-direction__list li:has(.about-direction__jp) .num {
+  position: relative;
+  top: -0.8em; /* keeps the former vertical-align: super position inside grid */
+}
+
+.about-direction__jp {
+  grid-column: 2;
+  font-size: 13px;
+  line-height: 1.6;
+  margin-top: 6px;
+  letter-spacing: 0.12em;
+}
+
+.about-info__jp {
+  font-size: 13px;
+  margin-top: 4px;
+}
+
 /* ---------- Contact Page ---------- */
 .contact-lead {
   padding-block: var(--space-3xl) var(--space-xl);
