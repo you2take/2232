@@ -1,23 +1,19 @@
-/* 2232.inc — rough prototype interactions */
+/* 2232.inc — site-wide interactions (hero, scroll type, header menu, reveal) */
 (() => {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   // --- Cinematic hero: scale + crossfade "3" + copy fade-in ---
   // The hero is wrapped in a tall .hero-wrap section. While the wrap is in view,
   // the inner .hero-sticky is pinned and its content animates based on how far
   // we've scrolled through the wrap (0 → 1).
   //
-  // React/Next mapping:
-  //   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start","end end"] });
-  //   const scale   = useTransform(scrollYProgress, [0, 0.7],   [0.32, 1]);
-  //   const opacity = useTransform(scrollYProgress, [0, 0.7],   [0.55, 1]);
-  //   const pink    = useTransform(scrollYProgress, [0.6, 0.85],[0,    1]);
-  //   const copy    = useTransform(scrollYProgress, [0.8, 1.0], [0,    1]);
+  // Progress ranges (p = 0..1 through the wrap): logo scale 0.32→1 and opacity 0.55→1
+  // over 0..0.65 (eased), pink "3" 0.55..0.92, JP copy 0.78..0.94, EN copy 0.86..1.
   const heroWrap  = document.querySelector('[data-hero]');
   const heroStack = heroWrap?.querySelector('.hero-stack');
   const heroPink  = heroWrap?.querySelector('.hero-stack__img--pink');
-  const heroCopy  = heroWrap?.querySelector('.hero-copy');
   const heroJp    = heroWrap?.querySelector('.hero-copy .hero__sub-jp');
   const heroEn    = heroWrap?.querySelector('.hero-copy .hero__sub-en');
-  const heroReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const easeInOut = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
   const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
@@ -62,7 +58,7 @@
   };
 
   if (heroWrap) {
-    if (heroReduce) {
+    if (reduceMotion) {
       // render the final state immediately
       heroStack.style.transform = 'scale(1)';
       heroStack.style.opacity = '1';
@@ -89,7 +85,6 @@
   // Spec note: in a React/Next rebuild this maps directly to
   //   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end','end start'] });
   //   const x = useTransform(scrollYProgress, [0,1], [base, base + delta]);
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const parallaxTracks = document.querySelectorAll('[data-parallax]');
   if (parallaxTracks.length && !reduceMotion) {
     const items = [...parallaxTracks].map((el) => ({
@@ -135,19 +130,21 @@
   const header = document.querySelector('.header');
   const burger = document.querySelector('.header__burger');
   if (header && burger) {
-    burger.addEventListener('click', () => {
-      header.classList.toggle('is-open');
-    });
+    const setOpen = (open) => {
+      header.classList.toggle('is-open', open);
+      burger.setAttribute('aria-expanded', String(open));
+    };
+    burger.setAttribute('aria-expanded', 'false');
+    burger.addEventListener('click', () => setOpen(!header.classList.contains('is-open')));
     // close on link tap in mobile overlay
     header.querySelectorAll('.header__nav a').forEach((a) => {
-      a.addEventListener('click', () => header.classList.remove('is-open'));
+      a.addEventListener('click', () => setOpen(false));
     });
   }
 
   // --- Scroll reveal ---
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const targets = document.querySelectorAll('.reveal');
-  if (targets.length && !reduce && 'IntersectionObserver' in window) {
+  if (targets.length && !reduceMotion && 'IntersectionObserver' in window) {
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {

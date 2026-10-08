@@ -133,7 +133,7 @@ ${jsonld.map((j) => `  <script type="application/ld+json">${JSON.stringify(j)}</
 
 const foot = `
   <footer class="footer">
-    <p class="footer__brand" aria-label="2232.inc">
+    <p class="footer__brand">
       <img src="/assets/logo-3-lime.svg" alt="2232.inc" class="footer__brand-img" />
     </p>
     <div class="footer__sns">
@@ -158,8 +158,7 @@ const GROUPS = [
   ['campaign', 'Campaign', ['キャンペーン', 'キャンペーンサイト', '周年サイト', 'イベントサイト']],
   ['media', 'Media', ['オウンドメディア', '学校サイト']],
 ];
-const groupOf = (w) =>
-  (GROUPS.find(([, , t]) => t.includes(w.tags[0])) || ['others', 'Others'])[0];
+const groupOf = (w) => GROUPS.find(([, , t]) => t.includes(w.tags[0]))?.[0] || 'others';
 const groupCount = (key) => works.filter((w) => groupOf(w) === key).length;
 
 const tags = (w) =>
@@ -168,16 +167,25 @@ const tags = (w) =>
     .map((t) => `<span>${esc(t)}</span>`)
     .join('')}</span>`;
 
+// Same @id / names as the JSON-LD on index.html and about.html.
 const PERSON = {
   '@type': 'Person',
   '@id': `${ORIGIN}/about.html#yuto-takegishi`,
   name: '竹岸勇人',
-  alternateName: ['Yuto Takegishi', 'たけぎし　ゆうと'],
+  alternateName: ['Yuto Takegishi', 'たけぎし　ゆうと', '竹岸 勇人'],
+};
+const ORG = {
+  '@type': 'Organization',
+  '@id': `${ORIGIN}/#organization`,
+  name: '2232.inc',
+  alternateName: ['株式会社2232', '2232', 'にーにーさんにー', 'ニーニーサンニー'],
+  url: `${ORIGIN}/`,
 };
 
 // Editorial rhythm for the Visual view (from the AIDesigner run 373b4bfa):
 // [column span, column start, top offset px, large caption]. Repeats every 18 works.
-// js/gallery.js re-applies it to the visible works when a filter is active.
+// Written inline for the no-JS layout and as data-rhythm for js/gallery.js, which
+// re-applies it to the shuffled / filtered order (single source of truth).
 const RHYTHM = [
   [9, 4, 0, 1], [4, 1, 0, 0], [6, 7, 128, 0], [8, 3, 64, 1], [6, 1, 0, 0], [4, 9, 96, 0],
   [8, 5, 32, 1], [4, 1, 64, 0], [6, 7, 160, 0], [7, 1, 64, 1], [4, 9, 32, 0], [5, 3, 96, 0],
@@ -199,12 +207,7 @@ const listHtml =
         name: 'Gallery — 2232.inc',
         url: listUrl,
         author: PERSON,
-        publisher: {
-          '@type': 'Organization',
-          name: '2232.inc',
-          alternateName: ['株式会社2232', 'にーにーさんにー', 'ニーニーサンニー'],
-          url: `${ORIGIN}/`,
-        },
+        publisher: ORG,
         mainEntity: {
           '@type': 'ItemList',
           numberOfItems: works.length,
@@ -238,13 +241,13 @@ ${GROUPS.map(([key, label]) => `          <button type="button" class="gallery-f
         </div>
       </div>
 
-      <ul class="gallery-visual" data-gallery-visual>
+      <ul class="gallery-visual" data-gallery-visual data-rhythm="${esc(JSON.stringify(RHYTHM))}">
 ${works
   .map((w, i) => {
     const [span, start, mt, large] = RHYTHM[i % RHYTHM.length];
     return `        <li class="gallery-visual__item${large ? ' is-large' : ''}" data-group="${groupOf(w)}" data-tone="${groupOf(w)}" style="--span:${span};--start:${start};--mt:${mt}px">
           <a class="gallery-work" href="/gallery/${w.key}.html">
-            <span class="gallery-work__media"><img src="/assets/gallery/thumbs/${w.key}.webp" alt="${esc(plain(w.name))}" width="640" height="400" loading="${i < 4 ? 'eager' : 'lazy'}" decoding="async" /></span>
+            <span class="gallery-work__media"><img src="/assets/gallery/thumbs/${w.key}.webp" alt="${esc(plain(w.name))}" width="640" height="400" loading="lazy" decoding="async" /></span>
             <span class="gallery-work__caption">
               <span class="gallery-work__num">${pad(i + 1)}</span>
               <span class="gallery-work__text">
@@ -272,7 +275,7 @@ ${works
   )
   .join('\n')}
       </ol>
-      <div class="gallery-preview" data-gallery-preview aria-hidden="true"><img alt="" width="640" height="400" /></div>
+      <div class="gallery-preview" data-gallery-preview aria-hidden="true"></div>
     </section>
   </main>
 ` +
@@ -286,7 +289,16 @@ for (const f of fs.readdirSync(path.join(SITE, 'gallery'))) {
     fs.unlinkSync(path.join(SITE, 'gallery', f));
   }
 }
-fs.writeFileSync(path.join(SITE, 'gallery/index.html'), listHtml);
+// Write a page only when its HTML changed, and remember it so the sitemap keeps the
+// previous lastmod for pages that did not change.
+const changed = new Set();
+const writePage = (file, html, loc) => {
+  const full = path.join(SITE, file);
+  if (fs.existsSync(full) && fs.readFileSync(full, 'utf8') === html) return;
+  fs.writeFileSync(full, html);
+  changed.add(loc);
+};
+writePage('gallery/index.html', listHtml, listUrl);
 
 // ---------- Detail ----------
 works.forEach((w, i) => {
@@ -332,7 +344,7 @@ works.forEach((w, i) => {
           <a href="/gallery/">Gallery</a><span aria-hidden="true">/</span><span class="gallery-tone">${esc(w.tags[0])}</span>
         </nav>
         <div class="gallery-detail__plate">
-          <p class="gallery-detail__num" aria-label="No.${pad(i + 1)}">${pad(i + 1)}</p>
+          <p class="gallery-detail__num">${pad(i + 1)}</p>
           <div class="gallery-detail__heading">
             <h1 class="gallery-detail__title">${jp(w.name)}</h1>
             ${tags(w)}
@@ -376,18 +388,20 @@ works.forEach((w, i) => {
   </main>
 ` +
     foot;
-  fs.writeFileSync(path.join(SITE, 'gallery', `${w.key}.html`), html);
+  writePage(`gallery/${w.key}.html`, html, url);
 });
 
 // ---------- Sitemap ----------
 const smPath = path.join(SITE, 'sitemap.xml');
 const sm = fs.readFileSync(smPath, 'utf8');
-const keep = [...sm.matchAll(/<url>[\s\S]*?<\/url>/g)]
-  .map((m) => m[0])
-  .filter((u) => !u.includes('/gallery/'));
+const blocks = [...sm.matchAll(/<url>[\s\S]*?<\/url>/g)].map((m) => m[0]);
+const keep = blocks.filter((u) => !u.includes('/gallery/'));
+const lastmods = new Map(
+  blocks.map((u) => [u.match(/<loc>(.*?)<\/loc>/)?.[1], u.match(/<lastmod>(.*?)<\/lastmod>/)?.[1]]),
+);
 const entry = (loc, priority) => `<url>
     <loc>${loc}</loc>
-    <lastmod>${TODAY}</lastmod>
+    <lastmod>${changed.has(loc) || !lastmods.get(loc) ? TODAY : lastmods.get(loc)}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>${priority}</priority>
   </url>`;
@@ -405,4 +419,4 @@ fs.writeFileSync(
 `,
 );
 
-console.log(`gallery: ${works.length} works → gallery/index.html + ${works.length} detail pages`);
+console.log(`gallery: ${works.length} works → gallery/index.html + ${works.length} detail pages (${changed.size} changed)`);
