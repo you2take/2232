@@ -900,6 +900,15 @@ img {
 [data-tone="campaign"]  { --tone: #E5FF00; } /* neon--yellow */
 [data-tone="media"]     { --tone: #B6FF3D; } /* neon--lime   */
 
+/* Deeper versions of the same hues: filter-chip fills (white labels need the contrast)
+   and all tones on the inverted Index view. */
+[data-tone="recruit"]   { --tone-deep: #E0006E; }
+[data-tone="corporate"] { --tone-deep: #008BA0; }
+[data-tone="brand"]     { --tone-deep: #8A00D6; }
+[data-tone="service"]   { --tone-deep: #00986A; }
+[data-tone="campaign"]  { --tone-deep: #7D8C00; }
+[data-tone="media"]     { --tone-deep: #4F8F00; }
+
 .gallery-meta__cat,
 .gallery-index__cat[data-tone],
 [data-tone] .gallery-tone,
@@ -1036,21 +1045,21 @@ img {
   border-bottom-color: var(--ink);
 }
 
-/* Filter chips: solid tone fill with the label knocked out to the page color.
-   (Page color rather than white: white on the neon yellow / lime / cyan is unreadable.) */
+/* Filter chips: solid fill in the deep tone with a white knocked-out label (both themes).
+   "All" uses a neutral fill. */
 .gallery-filter__btn,
 .gallery-filter__btn.is-active {
   padding: 7px 14px 8px;
   border: 0;
-  background: var(--tone, var(--ink));
-  color: var(--bg);
+  background: var(--tone-deep, #3A3A3A);
+  color: #FFFFFF;
   font-weight: 400;
   outline: 1px solid transparent;
   outline-offset: 3px;
   transition: opacity 240ms ease, box-shadow 240ms ease, outline-color 240ms ease;
 }
 
-.gallery-filter__btn:hover { color: var(--bg); opacity: 0.8; }
+.gallery-filter__btn:hover { color: #FFFFFF; opacity: 0.8; }
 
 /* Active chip: an offset hairline ring plus a soft neon glow (all chips stay fully filled
    so the knocked-out labels keep their contrast). */
@@ -1480,12 +1489,8 @@ html.is-inverted {
   --line-active: #000000;
 }
 
-html.is-inverted [data-tone="recruit"]   { --tone: #E0006E; }
-html.is-inverted [data-tone="corporate"] { --tone: #008BA0; }
-html.is-inverted [data-tone="brand"]     { --tone: #8A00D6; }
-html.is-inverted [data-tone="service"]   { --tone: #00986A; }
-html.is-inverted [data-tone="campaign"]  { --tone: #7D8C00; }
-html.is-inverted [data-tone="media"]     { --tone: #4F8F00; }
+html.is-inverted [data-tone] { --tone: var(--tone-deep); }
+html.is-inverted .gallery-filter__btn:not([data-tone]) { background: #000000; }
 
 /* The fixed header already reads on any background through mix-blend-mode: difference,
    so it keeps the dark-theme tokens (white ink) instead of being inverted. */
