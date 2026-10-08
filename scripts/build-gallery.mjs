@@ -262,7 +262,7 @@ ${works
 ${works
   .map(
     (w, i) => `        <li data-group="${groupOf(w)}">
-          <a class="gallery-index__row" href="/gallery/${w.key}.html" data-preview="/assets/gallery/thumbs/${w.key}.webp">
+          <a class="gallery-index__row" href="/gallery/${w.key}.html" data-tone="${groupOf(w)}" data-preview="/assets/gallery/thumbs/${w.key}.webp">
             <span class="gallery-index__num">${pad(i + 1)}</span>
             <span class="gallery-index__title">${jp(w.name)}</span>
             <span class="gallery-index__cat" data-tone="${groupOf(w)}">${esc(w.tags[0])}</span>
@@ -341,7 +341,7 @@ works.forEach((w, i) => {
       </header>
 
       <figure class="container gallery-detail__capture">
-        <img src="${fullSrc(w)}" alt="${esc(name)}" width="${w.width}" height="${w.height}" decoding="async" fetchpriority="high" />
+        <span class="gallery-detail__frame"><img src="${fullSrc(w)}" alt="${esc(name)}" width="${w.width}" height="${w.height}" decoding="async" fetchpriority="high" /></span>
       </figure>
 
       <section class="container gallery-detail__info">

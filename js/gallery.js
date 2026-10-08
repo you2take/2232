@@ -97,7 +97,7 @@
   applyFilter(initialFilter); // also lays out the shuffled order
   if (initialView !== 'visual') applyView(initialView);
 
-  // Visual view: rise in once when each work enters the viewport.
+  // Visual view: reveal once when each work enters the viewport (wipe + caption rise, see CSS).
   if (!reduce && 'IntersectionObserver' in window) {
     const io = new IntersectionObserver(
       (entries) => {
@@ -107,7 +107,7 @@
           io.unobserve(e.target);
         });
       },
-      { rootMargin: '0px 0px -10% 0px' },
+      { rootMargin: '0px 0px -8% 0px' },
     );
     visualItems.forEach((li) => {
       li.classList.add('is-pending');
