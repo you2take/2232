@@ -1486,7 +1486,7 @@ html.is-instant, html.is-instant body, html.is-instant .footer__brand-img { tran
   padding: 16px 0;
   background: transparent;
   border: none;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 30%, transparent);
   color: var(--ink);
   font-family: var(--font-sans);
   font-size: clamp(16px, 1.4vw, 20px);
@@ -1497,7 +1497,7 @@ html.is-instant, html.is-instant body, html.is-instant .footer__brand-img { tran
 
 .contact-form__input::placeholder,
 .contact-form__textarea::placeholder {
-  color: var(--ink-faint);
+  color: color-mix(in srgb, var(--ink) 75%, transparent);
 }
 
 .contact-form__input:focus,
@@ -1530,7 +1530,7 @@ html.is-instant, html.is-instant body, html.is-instant .footer__brand-img { tran
   font-family: var(--font-jp);
   font-size: 14px;
   font-weight: 300;
-  color: var(--ink-faint);
+  color: var(--ink-muted);
 }
 
 .contact-form__input[aria-invalid="true"],
@@ -1551,11 +1551,11 @@ html.is-instant, html.is-instant body, html.is-instant .footer__brand-img { tran
   font-size: 13px;
   font-weight: 300;
   line-height: 1.8;
-  color: var(--ink-faint);
+  color: var(--ink-muted);
 }
 
 .contact-form__note { margin-top: calc(-1 * var(--space-md)); }
-.contact-form__status { margin-top: var(--space-sm); min-height: 1.8em; color: var(--ink-muted); }
+.contact-form__status { margin-top: var(--space-sm); min-height: 1.8em; color: var(--ink); }
 .contact-form__submit:disabled { opacity: 0.4; cursor: default; }
 
 .contact-form__done {
