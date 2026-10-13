@@ -10,7 +10,7 @@
   <!-- End Google Tag Manager -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="/css/site-620eb1b5d33945fc.css" />
+  <link rel="stylesheet" href="/css/site-c337c53830e789d0.css" />
   <script src="/js/page-transition.js"></script>
   <title>Contact — 2232.inc | クリエイティブ/マーケティングブティック</title>
   <meta name="description" content="2232.inc（株式会社2232／にーにーさんにー）へのお仕事のご相談・お問い合わせフォーム。Web制作・ブランディング・アートディレクション・デジタルマーケティング。" />
@@ -72,16 +72,20 @@
     <section class="container">
       <form class="contact-form" action="https://script.google.com/macros/s/AKfycbzWrMKe4REWJ3ganhAuC3CxkIe7CFTH4nauVOHtzu-6IZ26Doih1Auz9Acbkl5PnKcmhQ/exec" method="post" novalidate data-contact-form>
         <div class="contact-form__row">
-          <input class="contact-form__input" type="text" name="name" placeholder="Name / お名前" aria-label="お名前" autocomplete="name" maxlength="100" required />
+          <label class="contact-form__label" for="contact-name">Name / お名前</label>
+          <input class="contact-form__input" type="text" id="contact-name" name="name" aria-label="お名前" autocomplete="name" maxlength="100" required />
         </div>
         <div class="contact-form__row">
-          <input class="contact-form__input" type="text" name="company" placeholder="Company / 会社名（任意）" aria-label="会社名（任意）" autocomplete="organization" maxlength="150" />
+          <label class="contact-form__label" for="contact-company">Company / 会社名（任意）</label>
+          <input class="contact-form__input" type="text" id="contact-company" name="company" aria-label="会社名（任意）" autocomplete="organization" maxlength="150" />
         </div>
         <div class="contact-form__row">
-          <input class="contact-form__input" type="email" name="email" placeholder="Email / メールアドレス" aria-label="メールアドレス" autocomplete="email" maxlength="200" required />
+          <label class="contact-form__label" for="contact-email">Email / メールアドレス</label>
+          <input class="contact-form__input" type="email" id="contact-email" name="email" aria-label="メールアドレス" autocomplete="email" maxlength="200" required />
         </div>
         <div class="contact-form__row">
-          <textarea class="contact-form__textarea" name="message" placeholder="Message / お問い合わせ内容" aria-label="お問い合わせ内容" maxlength="5000" required></textarea>
+          <label class="contact-form__label" for="contact-message">Message / お問い合わせ内容</label>
+          <textarea class="contact-form__textarea" id="contact-message" name="message" aria-label="お問い合わせ内容" maxlength="5000" required></textarea>
         </div>
         <div class="contact-form__trap" aria-hidden="true">
           <label>Website <input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
